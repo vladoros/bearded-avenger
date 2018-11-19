@@ -158,7 +158,11 @@ class IndicatorManager(IndicatorManagerPlugin):
             ii = self.create(token, i, bulk=True)
             actions.append(ii)
 
-        helpers.bulk(self.handle, actions, index=self._current_index())
+        try:
+            helpers.bulk(self.handle, actions, index=self._current_index())
+        except Exception as e:
+            logger.error(e)
+            actions = []
 
         if flush:
             self.flush()
